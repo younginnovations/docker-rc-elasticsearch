@@ -19,6 +19,8 @@ RUN apt-get install -y \
 
 RUN a2enmod rewrite
 RUN a2enmod php5
+RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt.ini
+RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/cli/conf.d/20-mcrypt.ini
 
 RUN wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.5.2.deb -O /root/elasticsearch-1.5.2.deb
 RUN dpkg -i /root/elasticsearch-1.5.2.deb
