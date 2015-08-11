@@ -22,14 +22,17 @@ RUN a2enmod php5
 RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt.ini
 RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/cli/conf.d/20-mcrypt.ini
 
-# Java for elasticsearch
-# See http://tecadmin.net/install-oracle-java-8-jdk-8-ubuntu-via-ppa/
 # software-properties-common python-software-properties for add-apt-repository
 RUN apt-get install -y software-properties-common python-software-properties
-RUN add-apt-repository ppa:webupd8team/java
-RUN apt-get update
-RUN apt-get install -y oracle-java8-installer
-RUN apt-get install -y oracle-java8-set-default
+
+# Java for elasticsearch
+# See http://tecadmin.net/install-oracle-java-8-jdk-8-ubuntu-via-ppa/
+# https://github.com/dockerfile/java/blob/master/oracle-java8/Dockerfile
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+    add-apt-repository ppa:webupd8team/java && \
+    apt-get update && \
+    apt-get install -y oracle-java8-installer
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle    
 
 # Install elasticsearch 1.5.2
 RUN wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.5.2.deb -O /root/elasticsearch-1.5.2.deb
