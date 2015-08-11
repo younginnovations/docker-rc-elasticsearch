@@ -47,5 +47,6 @@ RUN php composer.phar install --prefer-source
 RUN php composer.phar dump-autoload --optimize
 RUN php artisan clear-compiled
 
+EXPOSE 80
 CMD service elasticsearch restart && /usr/sbin/apache2ctl -D FOREGROUND
 
