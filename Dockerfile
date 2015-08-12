@@ -32,7 +32,7 @@ RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true 
     add-apt-repository ppa:webupd8team/java && \
     apt-get update && \
     apt-get install -y oracle-java8-installer
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle    
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # Install elasticsearch 1.5.2
 RUN wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.5.2.deb -O /root/elasticsearch-1.5.2.deb
@@ -41,12 +41,14 @@ RUN dpkg -i /root/elasticsearch-1.5.2.deb
 WORKDIR /var/www/html/
 RUN git clone https://github.com/younginnovations/resourcecontracts-elasticsearch rc-elasticsearch
 
+ADD conf/.env /var/www/html/rc-elasticsearch/.env
 WORKDIR /var/www/html/rc-elasticsearch
 RUN curl -s http://getcomposer.org/installer | php
 RUN php composer.phar install --prefer-source
 RUN php composer.phar dump-autoload --optimize
-RUN php artisan clear-compiled
 
 EXPOSE 80
+EXPOSE 9200
+EXPOSE 9300
 CMD service elasticsearch restart && /usr/sbin/apache2ctl -D FOREGROUND
 
